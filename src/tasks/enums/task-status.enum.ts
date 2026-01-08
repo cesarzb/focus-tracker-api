@@ -1,1 +1,5 @@
-export type status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+export enum TaskStatus {
+  TODO = 'TODO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE',
+}

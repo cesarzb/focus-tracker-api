@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task } from './interfaces';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdateTaskDto } from './dtos/update-task.dto';
 
 const tasks: Task[] = [
   {
@@ -62,5 +63,17 @@ export class TasksService {
     tasks.push(task);
 
     return task;
+  }
+
+  update(id: string, updateTaskDto: UpdateTaskDto): Task {
+    const index = tasks.findIndex((t: Task) => t.id === id);
+
+    if (index === -1) {
+      throw new NotFoundException(`Task with ${id} not found.`);
+    }
+
+    tasks[index] = { ...tasks[index], ...updateTaskDto };
+
+    return tasks[index];
   }
 }
