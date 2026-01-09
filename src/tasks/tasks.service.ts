@@ -76,4 +76,14 @@ export class TasksService {
 
     return tasks[index];
   }
+
+  delete(id: string): void {
+    const index = tasks.findIndex((task) => task.id === id);
+
+    if (!index) {
+      throw new NotFoundException(`Task with ${id} not found.`);
+    }
+
+    tasks.splice(index, index);
+  }
 }
