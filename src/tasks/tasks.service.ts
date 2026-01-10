@@ -80,10 +80,10 @@ export class TasksService {
   delete(id: string): void {
     const index = tasks.findIndex((task) => task.id === id);
 
-    if (!index) {
+    if (index === -1) {
       throw new NotFoundException(`Task with ${id} not found.`);
     }
 
-    tasks.splice(index, index);
+    tasks.splice(index, 1);
   }
 }
