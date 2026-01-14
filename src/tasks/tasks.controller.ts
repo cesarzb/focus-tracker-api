@@ -4,12 +4,14 @@ import {
   Get,
   Param,
   Post,
+  Patch,
   Delete,
   ParseIntPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity';
 import { CreateTaskDto } from './dtos/create-task.dto';
+import { UpdateTaskDto } from './dtos/update-task.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -30,13 +32,13 @@ export class TasksController {
     return this.tasksService.create(createTaskDto);
   }
 
-  /*@Patch(':id')
+  @Patch(':id')
   UpdateTaskDtodate(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     return this.tasksService.update(id, updateTaskDto);
-  }*/
+  }
 
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
