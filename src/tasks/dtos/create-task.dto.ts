@@ -3,9 +3,12 @@ import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  goal: string;
+
+  @IsString()
+  must: string;
 
   @IsString()
   @IsOptional()
-  description?: string;
+  nice?: string;
 }

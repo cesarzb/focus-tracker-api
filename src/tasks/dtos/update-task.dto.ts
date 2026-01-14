@@ -3,10 +3,13 @@ import { TaskStatus } from '../enums/task-status.enum';
 
 export class UpdateTaskDto {
   @IsOptional()
-  title: string;
+  goal: string;
 
   @IsOptional()
-  description: string;
+  must: string;
+
+  @IsOptional()
+  nice: string;
 
   @IsOptional()
   @IsEnum(TaskStatus)
