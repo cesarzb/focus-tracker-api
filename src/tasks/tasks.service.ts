@@ -18,8 +18,8 @@ export class TasksService {
     return task;
   }
 
-  findAll(): Promise<Task[]> {
-    return this.tasksRepository.find();
+  async findAll(): Promise<Task[]> {
+    return await this.tasksRepository.find();
   }
 
   async create(createTaskDto: CreateTaskDto): Promise<Task> {

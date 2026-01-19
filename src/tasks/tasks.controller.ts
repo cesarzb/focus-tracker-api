@@ -32,7 +32,7 @@ export class TasksController {
   }
 
   @Patch(':id')
-  UpdateTaskDtodate(
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
