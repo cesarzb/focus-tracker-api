@@ -5,6 +5,9 @@ import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionsModule } from './sessions/sessions.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -35,8 +38,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         };
       },
     }),
+    UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, UserController],
+  providers: [AppService, UserService],
 })
 export class AppModule {}
