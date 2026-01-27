@@ -9,6 +9,7 @@ import {
 import { CreateUserDto } from './dtos';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
+
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -23,8 +24,8 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto): void {
-  // console.log(createUserDto);
-  // }
+  @Post()
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.create(createUserDto);
+  }
 }
