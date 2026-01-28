@@ -24,6 +24,18 @@ export class UsersService {
     return user;
   }
 
+  async findOneByUsernameWithPassword(username: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { username },
+      select: ['id', 'username', 'password'],
+    });
+
+    if (!user)
+      throw new NotFoundException(`User with username ${username} not found.`);
+
+    return user;
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { password, ...userData } = createUserDto;
 
