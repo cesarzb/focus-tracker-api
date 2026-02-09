@@ -22,6 +22,7 @@ import { UpdateTaskDto, CreateTaskDto } from './dtos';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Tasks')
+@UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
@@ -36,7 +37,6 @@ export class TasksController {
     return this.tasksService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Retrieve all tasks' })
   @ApiOkResponse({ type: [Task], description: 'List of all tasks.' })
