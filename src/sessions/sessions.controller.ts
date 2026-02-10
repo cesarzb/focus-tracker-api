@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,8 +21,10 @@ import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
 import { UpdateSessionDto } from './dtos/update-session.dto';
 import { CreateSessionDto } from './dtos/create-session.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Sessions')
+@UseGuards(JwtAuthGuard)
 @Controller('sessions')
 export class SessionsController {
   constructor(private sessionsService: SessionsService) {}
