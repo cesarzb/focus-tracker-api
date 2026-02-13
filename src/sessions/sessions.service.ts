@@ -16,6 +16,7 @@ export class SessionsService {
     const session = await this.sessionsRepository.findOneBy({ id });
 
     if (!session) throw new NotFoundException(`Session with ${id} not found.`);
+
     return session;
   }
 
@@ -23,9 +24,18 @@ export class SessionsService {
     return await this.sessionsRepository.find();
   }
 
-  async create(createSessionDto: CreateSessionDto): Promise<Session> {
-    const session = this.sessionsRepository.create(createSessionDto);
-    return await this.sessionsRepository.save(session);
+  async create(
+    userId: number,
+    createSessionDto: CreateSessionDto,
+  ): Promise<Session> {
+    const session = this.sessionsRepository.create({
+      ...createSessionDto,
+      startTime: new Date(),
+      endTime: new Date(),
+      user: { id: userId },
+    });
+
+    return this.sessionsRepository.save(session);
   }
 
   async update(
@@ -40,6 +50,7 @@ export class SessionsService {
     if (!session) {
       throw new NotFoundException(`Session ${id} not found.`);
     }
+
     return this.sessionsRepository.save(session);
   }
 

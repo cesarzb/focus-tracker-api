@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -22,6 +23,7 @@ import { Session } from './entities/session.entity';
 import { UpdateSessionDto } from './dtos/update-session.dto';
 import { CreateSessionDto } from './dtos/create-session.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import type { RequestWithUser } from 'src/auth/interfaces/request-with-user.interface';
 
 @ApiTags('Sessions')
 @UseGuards(JwtAuthGuard)
@@ -50,8 +52,13 @@ export class SessionsController {
     type: Session,
     description: 'Session created successfully',
   })
-  create(@Body() createSessionDto: CreateSessionDto): Promise<Session> {
-    return this.sessionsService.create(createSessionDto);
+  create(
+    @Request() req: RequestWithUser,
+    @Body() createSessionDto: CreateSessionDto,
+  ): Promise<Session> {
+    const userId = req.user.userId;
+
+    return this.sessionsService.create(userId, createSessionDto);
   }
 
   @Patch(':id')

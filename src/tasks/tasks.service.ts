@@ -32,7 +32,7 @@ export class TasksService {
       user: { id: userId },
     });
 
-    return await this.tasksRepository.save(task);
+    return this.tasksRepository.save(task);
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
