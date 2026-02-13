@@ -13,7 +13,10 @@ export class SessionsService {
   ) {}
 
   async findOne(id: number): Promise<Session> {
-    const session = await this.sessionsRepository.findOneBy({ id });
+    const session = await this.sessionsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
 
     if (!session) throw new NotFoundException(`Session with ${id} not found.`);
 
