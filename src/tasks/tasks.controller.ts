@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,6 +21,7 @@ import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity';
 import { UpdateTaskDto, CreateTaskDto } from './dtos';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import type { RequestWithUser } from 'src/auth/interfaces/request-with-user.interface';
 
 @ApiTags('Tasks')
 @UseGuards(JwtAuthGuard)
@@ -47,8 +49,13 @@ export class TasksController {
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiCreatedResponse({ type: Task, description: 'Task successfully created.' })
-  create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksService.create(createTaskDto);
+  create(
+    @Request() req: RequestWithUser,
+    @Body() createTaskDto: CreateTaskDto,
+  ): Promise<Task> {
+    const userId = req.user.userId;
+
+    return this.tasksService.create(userId, createTaskDto);
   }
 
   @Patch(':id')
