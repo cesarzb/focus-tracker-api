@@ -24,6 +24,7 @@ import { UpdateSessionDto } from './dtos/update-session.dto';
 import { CreateSessionDto } from './dtos/create-session.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import type { RequestWithUser } from 'src/auth/interfaces/request-with-user.interface';
+import { SessionOwnerGuard } from './guards/session-owner.guard';
 
 @ApiTags('Sessions')
 @UseGuards(JwtAuthGuard)
@@ -32,6 +33,7 @@ export class SessionsController {
   constructor(private sessionsService: SessionsService) {}
 
   @Get(':id')
+  @UseGuards(SessionOwnerGuard)
   @ApiOperation({ summary: 'Get a session by ID' })
   @ApiOkResponse({ type: Session })
   @ApiNotFoundResponse({ description: 'No session found with this ID' })
@@ -62,6 +64,7 @@ export class SessionsController {
   }
 
   @Patch(':id')
+  @UseGuards(SessionOwnerGuard)
   @ApiOperation({ summary: 'Update session details' })
   @ApiOkResponse({ type: Session })
   @ApiNotFoundResponse({ description: 'Session not found' })
