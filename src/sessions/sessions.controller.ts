@@ -43,7 +43,7 @@ export class SessionsController {
 
   @Get()
   @ApiOperation({ summary: 'List all sessions' })
-  @ApiOkResponse({ type: [Session] }) // Essential: Note the array brackets
+  @ApiOkResponse({ type: [Session] })
   findAll(): Promise<Session[]> {
     return this.sessionsService.findAll();
   }
