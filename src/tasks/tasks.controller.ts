@@ -16,6 +16,7 @@ import {
   ApiOkResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity';
@@ -26,6 +27,7 @@ import { TaskOwnerGuard } from './guards/task-owner.guard';
 
 @ApiTags('Tasks')
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth('access-token')
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}

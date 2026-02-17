@@ -17,6 +17,7 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiNoContentResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { SessionsService } from './sessions.service';
 import { Session } from './entities/session.entity';
@@ -28,6 +29,7 @@ import { SessionOwnerGuard } from './guards/session-owner.guard';
 
 @ApiTags('Sessions')
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth('access-token')
 @Controller('sessions')
 export class SessionsController {
   constructor(private sessionsService: SessionsService) {}
