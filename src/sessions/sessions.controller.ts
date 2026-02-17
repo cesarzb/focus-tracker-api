@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -46,8 +47,9 @@ export class SessionsController {
   @Get()
   @ApiOperation({ summary: 'List all sessions' })
   @ApiOkResponse({ type: [Session] })
-  findAll(): Promise<Session[]> {
-    return this.sessionsService.findAll();
+  findAll(@Req() req: RequestWithUser): Promise<Session[]> {
+    const userId = req.user.userId;
+    return this.sessionsService.findAll(userId);
   }
 
   @Post()

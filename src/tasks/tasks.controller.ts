@@ -8,7 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
-  Request,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -46,15 +46,16 @@ export class TasksController {
   @Get()
   @ApiOperation({ summary: 'Retrieve all tasks' })
   @ApiOkResponse({ type: [Task], description: 'List of all tasks.' })
-  findAll(): Promise<Task[]> {
-    return this.tasksService.findAll();
+  findAll(@Req() req: RequestWithUser): Promise<Task[]> {
+    const userId = req.user.userId;
+    return this.tasksService.findAll(userId);
   }
 
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiCreatedResponse({ type: Task, description: 'Task successfully created.' })
   create(
-    @Request() req: RequestWithUser,
+    @Req() req: RequestWithUser,
     @Body() createTaskDto: CreateTaskDto,
   ): Promise<Task> {
     const userId = req.user.userId;

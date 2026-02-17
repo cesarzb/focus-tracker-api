@@ -23,8 +23,10 @@ export class SessionsService {
     return session;
   }
 
-  async findAll(): Promise<Session[]> {
-    return await this.sessionsRepository.find();
+  async findAll(userId: number): Promise<Session[]> {
+    return await this.sessionsRepository.find({
+      where: { user: { id: userId } },
+    });
   }
 
   async create(
