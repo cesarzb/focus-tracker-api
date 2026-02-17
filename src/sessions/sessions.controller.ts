@@ -76,6 +76,7 @@ export class SessionsController {
   }
 
   @Delete(':id')
+  @UseGuards(SessionOwnerGuard)
   @ApiOperation({ summary: 'Delete a session' })
   @ApiNoContentResponse({ description: 'Session deleted successfully' })
   @ApiNotFoundResponse({ description: 'Session not found' })
