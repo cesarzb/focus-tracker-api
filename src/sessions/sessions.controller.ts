@@ -7,6 +7,8 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Req,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -23,6 +25,8 @@ import { Session } from './entities/session.entity';
 import { UpdateSessionDto } from './dtos/update-session.dto';
 import { CreateSessionDto } from './dtos/create-session.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import type { RequestWithUser } from 'src/auth/interfaces/request-with-user.interface';
+import { SessionOwnerGuard } from './guards/session-owner.guard';
 
 @ApiTags('Sessions')
 @UseGuards(JwtAuthGuard)
@@ -32,6 +36,7 @@ export class SessionsController {
   constructor(private sessionsService: SessionsService) {}
 
   @Get(':id')
+  @UseGuards(SessionOwnerGuard)
   @ApiOperation({ summary: 'Get a session by ID' })
   @ApiOkResponse({ type: Session })
   @ApiNotFoundResponse({ description: 'No session found with this ID' })
@@ -41,9 +46,10 @@ export class SessionsController {
 
   @Get()
   @ApiOperation({ summary: 'List all sessions' })
-  @ApiOkResponse({ type: [Session] }) // Essential: Note the array brackets
-  findAll(): Promise<Session[]> {
-    return this.sessionsService.findAll();
+  @ApiOkResponse({ type: [Session] })
+  findAll(@Req() req: RequestWithUser): Promise<Session[]> {
+    const userId = req.user.userId;
+    return this.sessionsService.findAll(userId);
   }
 
   @Post()
@@ -52,11 +58,17 @@ export class SessionsController {
     type: Session,
     description: 'Session created successfully',
   })
-  create(@Body() createSessionDto: CreateSessionDto): Promise<Session> {
-    return this.sessionsService.create(createSessionDto);
+  create(
+    @Request() req: RequestWithUser,
+    @Body() createSessionDto: CreateSessionDto,
+  ): Promise<Session> {
+    const userId = req.user.userId;
+
+    return this.sessionsService.create(userId, createSessionDto);
   }
 
   @Patch(':id')
+  @UseGuards(SessionOwnerGuard)
   @ApiOperation({ summary: 'Update session details' })
   @ApiOkResponse({ type: Session })
   @ApiNotFoundResponse({ description: 'Session not found' })
@@ -68,6 +80,7 @@ export class SessionsController {
   }
 
   @Delete(':id')
+  @UseGuards(SessionOwnerGuard)
   @ApiOperation({ summary: 'Delete a session' })
   @ApiNoContentResponse({ description: 'Session deleted successfully' })
   @ApiNotFoundResponse({ description: 'Session not found' })

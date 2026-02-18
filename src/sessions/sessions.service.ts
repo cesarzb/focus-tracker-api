@@ -13,19 +13,34 @@ export class SessionsService {
   ) {}
 
   async findOne(id: number): Promise<Session> {
-    const session = await this.sessionsRepository.findOneBy({ id });
+    const session = await this.sessionsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
 
     if (!session) throw new NotFoundException(`Session with ${id} not found.`);
+
     return session;
   }
 
-  async findAll(): Promise<Session[]> {
-    return await this.sessionsRepository.find();
+  async findAll(userId: number): Promise<Session[]> {
+    return await this.sessionsRepository.find({
+      where: { user: { id: userId } },
+    });
   }
 
-  async create(createSessionDto: CreateSessionDto): Promise<Session> {
-    const session = this.sessionsRepository.create(createSessionDto);
-    return await this.sessionsRepository.save(session);
+  async create(
+    userId: number,
+    createSessionDto: CreateSessionDto,
+  ): Promise<Session> {
+    const session = this.sessionsRepository.create({
+      ...createSessionDto,
+      startTime: new Date(),
+      endTime: new Date(),
+      user: { id: userId },
+    });
+
+    return this.sessionsRepository.save(session);
   }
 
   async update(
@@ -40,6 +55,7 @@ export class SessionsService {
     if (!session) {
       throw new NotFoundException(`Session ${id} not found.`);
     }
+
     return this.sessionsRepository.save(session);
   }
 
